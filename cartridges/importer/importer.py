@@ -235,12 +235,16 @@ class Importer(ErrorProducer):
         source, *_rest = data
         logging.debug("Import done for source %s", source.source_id)
         self.n_source_tasks_done += 1
+        if self.n_source_tasks_done > self.n_source_tasks_created:
+            logging.error("Importer: Source tasks completed count is greater than total tasks")
         self.progress_changed_callback()
 
     def pipeline_advanced_callback(self, pipeline: Pipeline) -> None:
         """Callback called when a pipeline for a game has advanced"""
         if pipeline.is_done:
             self.n_pipelines_done += 1
+            if self.n_pipelines_done > len(self.games_pipeline):
+                logging.error("Importer: pipelines completed count is greater than total pipelines")
             self.progress_changed_callback()
 
     def progress_changed_callback(self) -> None:
