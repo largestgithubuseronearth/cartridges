@@ -210,7 +210,6 @@ class Importer(ErrorProducer):
                 logging.info("Imported %s (%s)", game.name, game.game_id)
                 pipeline.connect(
                     "advanced",
-                    # I'm not sure idle_add is needed here, but a widget is updated in the callback
                     self.pipeline_advanced_callback,
                 )
                 self.game_pipelines.add(pipeline)
