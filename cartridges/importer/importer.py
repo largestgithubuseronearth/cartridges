@@ -236,7 +236,7 @@ class Importer(ErrorProducer):
         """Callback called when a pipeline for a game has advanced"""
         if pipeline.is_done:
             self.n_pipelines_done += 1
-            if self.n_pipelines_done > len(self.games_pipeline):
+            if self.n_pipelines_done > len(self.game_pipelines):
                 logging.error(
                     "Importer: pipelines completed count is greater than total pipelines"
                 )
