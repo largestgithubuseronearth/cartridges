@@ -96,6 +96,13 @@ class Importer(ErrorProducer):
 
     @property
     def finished(self) -> bool:
+        # TODO remove this before sending PR. Helpful for testing
+        print("FINISHED CALLED")
+        print(f"pipelines || total: {len(self.game_pipelines)} //// done: {self.n_pipelines_done}")
+        print(f"threads || total: {self.n_source_tasks_created} //// done: {self.n_source_tasks_done} ")
+        print(f'result: {bool(self.n_source_tasks_created == self.n_source_tasks_done and len(self.game_pipelines) == self.n_pipelines_done)}')
+        print('-----------------------')
+
         return (
             self.n_source_tasks_created == self.n_source_tasks_done
             and len(self.game_pipelines) == self.n_pipelines_done
@@ -211,7 +218,8 @@ class Importer(ErrorProducer):
                 pipeline.connect(
                     "advanced",
                     # I'm not sure idle_add is needed here, but a widget is updated in the callback
-                    lambda *args: GLib.idle_add(self.pipeline_advanced_callback, *args),
+                    # TODO why use idle_add at all? It calls the pipeline callback too often, resulting in pipelines_done to be > total pipelines.
+                    self.pipeline_advanced_callback,
                 )
                 self.game_pipelines.add(pipeline)
 
